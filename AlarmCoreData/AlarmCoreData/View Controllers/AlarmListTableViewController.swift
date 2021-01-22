@@ -79,6 +79,5 @@ extension AlarmListTableViewController: IsEnabledStatusDelegate {
         let alarm = AlarmController.shared.alarms[indexPath.row]
         AlarmController.shared.toggleIsEnabledStatusOf(alarm: alarm)
         self.tableView.reloadData()
-        print("\(alarm.title ?? "") is now enabled? \(alarm.isEnabled)")
     }
 }

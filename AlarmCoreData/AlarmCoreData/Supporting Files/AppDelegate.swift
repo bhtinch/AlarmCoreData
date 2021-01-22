@@ -14,7 +14,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { (authorized, error) in
+            if let error = error {
+                print("There was an error requesting authorization to use notifications.  Error: \(error.localizedDescription)")
+            }
+            
+            if authorized {
+                print("User authorized notifications")
+                UNUserNotificationCenter.current().delegate = self
+            } else {
+                print("User denied notifications")
+            }
+        }
+
         return true
     }
 
@@ -77,5 +90,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
+}
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        NotificationCenter.default.post(name: Notification.Name("alarmNotification"), object: nil)
+        completionHandler([.sound, .banner])
+    }
+    
 }
 
